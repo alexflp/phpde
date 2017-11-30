@@ -72,15 +72,9 @@
 <img alt="扫码支付" src="qrcode.php?data=<?php echo urlencode($url2); ?>" style="width:150px;height:150px;"/>
 <div style="margin-left: 10px;color:#556B2F;font-size:30px;font-weight: bolder;">方式二、跳转到AlphaPay支付</div>
 <br/>
-<button onclick="redirect('<?php 
-                                
-                               
-                                   if($detect->isMobile()){
+<button onclick="redirect('<?php
                                      echo FlashPayApi::getJsApiRedirectUrl($result['pay_url'], $inputObj);
-                                        
-                                    }else{
-                                          echo FlashPayApi::getQRRedirectUrl($result['pay_url'], $inputObj); 
-                                    }
+                                
 
                             ?>')">跳转
 </button>
