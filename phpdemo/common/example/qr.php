@@ -39,18 +39,24 @@
         //对客户端进行识别，如果不是PC，进行微信客户端的跳转
         if($detect->isMobile()){
             $result = FlashPayApi::jsApiOrder($input);
+
+            $inputObj = new FlashPayJsApiRedirect();
+           
+            $inputObj->setDirectPay('true');
+            $inputObj->setRedirect(urlencode('http://www.flashpayment.com?order_id=' . strval($input->getOrderId())));
+
             echo "this phone";
             
         }else{
              $result = FlashPayApi::qrOrder($input);
+             $url2 = $result["code_url"];
+            $inputObj = new FlashPayRedirect();
+             $inputObj->setRedirect(urlencode('http://119.29.230.16/success.php?order_id=' . strval($input->getOrderId())));
             echo "this pc";
         }
        
-        $url2 = $result["code_url"];
-
-        //跳转
-        $inputObj = new FlashPayRedirect();
-        $inputObj->setRedirect(urlencode('http://119.29.230.16/success.php?order_id=' . strval($input->getOrderId())));
+      
+       
        
         ?>
     
@@ -72,11 +78,8 @@
 <img alt="扫码支付" src="qrcode.php?data=<?php echo urlencode($url2); ?>" style="width:150px;height:150px;"/>
 <div style="margin-left: 10px;color:#556B2F;font-size:30px;font-weight: bolder;">方式二、跳转到AlphaPay支付</div>
 <br/>
-<button onclick="redirect('<?php 
-                                
-                               
-                                   if($detect->isMobile()){
-                                     echo FlashPayApi::getJsApiRedirectUrl($result['pay_url'], $inputObj);
+<button onclick="redirect('<?php if($detect->isMobile()){
+                                        echo FlashPayApi::getJsApiRedirectUrl($result['pay_url'], $inputObj);
                                         
                                     }else{
                                           echo FlashPayApi::getQRRedirectUrl($result['pay_url'], $inputObj); 
